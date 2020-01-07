@@ -27,7 +27,7 @@
 #include "ScriptHighlighting.h"
 
 const int NO_CURRENT_HISTORY_COMMAND = -1;
-const int MAX_HISTORY_SIZE = 256;
+const int MAX_HISTORY_SIZE = 4096;
 const QString HISTORY_FILENAME = "JSConsole.history.json";
 
 const QString COMMAND_STYLE = "color: #266a9b;";
@@ -530,10 +530,26 @@ bool JSConsole::eventFilter(QObject* sender, QEvent* event) {
     return false;
 }
 
+
+
 void JSConsole::setToNextCommandInHistory() {
     if (_currentCommandInHistory >= 0) {
-        _currentCommandInHistory--;
+        int temp_currentCommandInHistory = _currentCommandInHistory;
+        QTextCursor cursor = _ui->promptTextEdit->textCursor();
+        auto leftOfCursor = _ui->promptTextEdit->toPlainText().left(cursor.position());
+        auto rightOfCursor = _ui->promptTextEdit->toPlainText().mid(cursor.position());
+        if (rightOfCursor != "") {
+            for (int i = temp_currentCommandInHistory; i >=0; i--) {
+                if (_commandHistory[i].startsWith(leftOfCursor)) {
+                    _currentCommandInHistory = i;
+                    break;
+                }
+            }
+        } else {
+            _currentCommandInHistory--;
+        }
         if (_currentCommandInHistory == NO_CURRENT_HISTORY_COMMAND) {
+            _currentCommandInHistory = temp_currentCommandInHistory;
             setAndSelectCommand(_rootCommand);
         } else {
             setAndSelectCommand(_commandHistory[_currentCommandInHistory]);
@@ -543,11 +559,34 @@ void JSConsole::setToNextCommandInHistory() {
 
 void JSConsole::setToPreviousCommandInHistory() {
     if (_currentCommandInHistory < (_commandHistory.length() - 1)) {
-        if (_currentCommandInHistory == NO_CURRENT_HISTORY_COMMAND) {
-            _rootCommand = _ui->promptTextEdit->toPlainText();
+        int temp_currentCommandInHistory = _currentCommandInHistory;
+        QTextCursor cursor = _ui->promptTextEdit->textCursor();
+        QString leftOfCursor = _ui->promptTextEdit->toPlainText().left(cursor.position());
+        QString rightOfCursor = _ui->promptTextEdit->toPlainText().mid(cursor.position());
+        if (rightOfCursor.size() != 0) {
+            if (temp_currentCommandInHistory < 0) {
+                temp_currentCommandInHistory = 0;
+            }
+            for (int i = temp_currentCommandInHistory; i < _commandHistory.size(); i++) {
+                if (_commandHistory[i].startsWith(leftOfCursor)) {
+                    _currentCommandInHistory = i;
+                    break;
+                }
+            }
+        } else {
+            _currentCommandInHistory++;
         }
-        _currentCommandInHistory++;
-        setAndSelectCommand(_commandHistory[_currentCommandInHistory]);
+        auto aaaa = leftOfCursor.toStdString();
+        auto bbbb = _commandHistory.toStdList();
+        auto cccc = rightOfCursor.toStdString();
+        auto eeee = rightOfCursor.size();
+        if (_currentCommandInHistory == NO_CURRENT_HISTORY_COMMAND) {
+            _currentCommandInHistory = temp_currentCommandInHistory;
+            _rootCommand = _ui->promptTextEdit->toPlainText();
+            setAndSelectCommand(_rootCommand);
+        } else {
+            setAndSelectCommand(_commandHistory[_currentCommandInHistory]);
+        }
     }
 }
 
@@ -562,10 +601,17 @@ void JSConsole::resizeTextInput() {
 
 void JSConsole::setAndSelectCommand(const QString& text) {
     QTextCursor cursor = _ui->promptTextEdit->textCursor();
+    int pos = cursor.position();
+    
     cursor.select(QTextCursor::Document);
     cursor.deleteChar();
-    cursor.insertText(text);
-    cursor.movePosition(QTextCursor::End);
+    cursor.insertText(text); 
+    
+    if (text.length() - 1 < pos) {
+        pos = text.length();
+    }
+    cursor = _ui->promptTextEdit->textCursor();
+    cursor.setPosition(pos);
 }
 
 void JSConsole::scrollToBottom() {
