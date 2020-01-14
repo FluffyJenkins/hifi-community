@@ -33,7 +33,7 @@ Verify by g++ --version
 ```bash
 sudo apt-get install cmake -y
 ```
-Verify by git --version  
+Verify by cmake --version  
 1. *Ubuntu 16.04* cmake  
 ```bash
 wget https://cmake.org/files/v3.14/cmake-3.14.2-Linux-x86_64.sh
@@ -63,9 +63,9 @@ sudo apt-get install libasound2 libxmu-dev libxi-dev freeglut3-dev libasound2-de
 ```bash
 sudo apt-get -y install libpulse0 libnss3 libnspr4 libfontconfig1 libxcursor1 libxcomposite1 libxtst6 libxslt1.1
 ```
-1.  Install Python 3:
+1.  Install Python 3 and required packages
 ```bash
-sudo apt-get install python3.6
+sudo apt-get install python3 python3-distro
 ```
 1.  Install node, required to build the jsdoc documentation
 ```bash
@@ -76,26 +76,27 @@ sudo apt-get install nodejs
 
 Clone this repository:
 ```bash
-git clone https://github.com/highfidelity/hifi.git
+git clone https://github.com/kasenvr/project-athena.git
 ```
 
 To compile a RELEASE version checkout the tag you need getting a list of all tags:
 ```bash
 git fetch -a
-git tags
+git tag
 ```
 
 Then checkout last tag with:
 ```bash
-git checkout tags/v0.79.0
+git checkout tag/1.0
 ```
 
 ### Compiling
 
 Create the build directory:
 ```bash
-mkdir -p hifi/build
-cd hifi/build
+cd project-athena
+mkdir build
+cd build
 ```
 
 Prepare makefiles:
