@@ -494,7 +494,7 @@ QUuid EntityScriptingInterface::addEntityInternal(const EntityItemProperties& pr
     } else if (entityHostType == entity::HostType::LOCAL) {
         // For now, local entities are always collisionless
         // TODO: create a separate, local physics simulation that just handles local entities (and MyAvatar?)
-        propertiesWithSimID.setCollisionless(true);
+        //propertiesWithSimID.setCollisionless(true);
     }
 
     // the created time will be set in EntityTree::addEntity by recordCreationTime()
@@ -855,7 +855,7 @@ QUuid EntityScriptingInterface::editEntity(const QUuid& id, const EntityItemProp
         entity::HostType entityHostType = entity->getEntityHostType();
         properties.setEntityHostType(entityHostType);
         if (entityHostType == entity::HostType::LOCAL) {
-            properties.setCollisionless(true);
+            //properties.setCollisionless(true);
         }
         properties.setOwningAvatarID(entity->getOwningAvatarID());
 

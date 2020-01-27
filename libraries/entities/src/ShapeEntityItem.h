@@ -101,6 +101,10 @@ public:
 
     PulsePropertyGroup getPulseProperties() const;
 
+    bool shouldBePhysical() const override {
+        return !isDead() && getShapeType() != SHAPE_TYPE_NONE && (!isLocalEntity() || getName().contains("physical"));
+    }
+
 protected:
     glm::u8vec3 _color;
     float _alpha { 1.0f };

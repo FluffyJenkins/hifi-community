@@ -117,34 +117,20 @@ vr::IVRSystem* acquireOpenVrSystem() {
     if (hmdPresent && !isHMDInErrorState) {
         Lock lock(mutex);
         if (!activeHmd) {
-#if DEV_BUILD
-            qCDebug(displayplugins) << "OpenVR: No vr::IVRSystem instance active, building";
-#endif
+            #if DEV_BUILD
+                      qCDebug(displayplugins) << "OpenVR: No vr::IVRSystem instance active, building";
+            #endif
             vr::EVRInitError eError = vr::VRInitError_None;
             activeHmd = vr::VR_Init(&eError, vr::VRApplication_Background);
-
-<<<<<<< HEAD
-#if DEV_BUILD
-            qCDebug(displayplugins) << "OpenVR display: HMD is " << activeHmd << " error is " << eError;
-#endif
-=======
             #if DEV_BUILD
                 qCDebug(displayplugins) << "OpenVR display: HMD is " << activeHmd << " error is " << eError;
             #endif
->>>>>>> origin/kasen/core
-
             if (eError == vr::VRInitError_Init_HmdNotFound) {
                 isHMDInErrorState = true;
                 activeHmd = nullptr;
-<<<<<<< HEAD
-#if DEV_BUILD
-                qCDebug(displayplugins) << "OpenVR: No HMD connected, setting nullptr!";
-#endif
-=======
                 #if DEV_BUILD
                     qCDebug(displayplugins) << "OpenVR: No HMD connected, setting nullptr!";
                 #endif
->>>>>>> origin/kasen/core
             }
         }
         if (activeHmd) {
