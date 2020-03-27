@@ -53,6 +53,40 @@ colours["localChatColour"] = Settings.getValue(settingsRoot + "/localChatColour"
 colours["domainChatColour"] = Settings.getValue(settingsRoot + "/domainChatColour", defaultColour);
 colours["gridChatColour"] = Settings.getValue(settingsRoot + "/gridChatColour", defaultColour);
 
+var commands = {
+    "l": function (cmd1, commandList, restOfMsg, commandResult, cmd, msg) {
+        chatBarChannel = "Local";
+        return restOfMsg;
+    },
+    "d": function (cmd1, commandList, restOfMsg, commandResult, cmd, msg) {
+        chatBarChannel = "Domain";
+        return restOfMsg;
+    },
+    "g": function (cmd1, commandList, restOfMsg, commandResult, cmd, msg) {
+        chatBarChannel = "Grid";
+        return restOfMsg;
+    },
+    "goto": function (cmd1, commandList, restOfMsg, commandResult, cmd, msg) {
+        var result = go2(restOfMsg);
+        if (result) {
+            gotoConfirm(result.url, result.name, (cmd1 === "goto"));
+        } else {
+            gotoConfirm(commandList[1], undefined, (cmd1 === "goto"));
+        }
+        return commandResult(msg);
+    },
+    "gotos": function (cmd1, commandList, restOfMsg, commandResult, cmd, msg) {
+        commands["goto"](cmd1, commandList, restOfMsg, commandResult);
+    },
+    "me": function (cmd1, commandList, restOfMsg, commandResult, cmd, msg) {
+        msg = cmd.avatarName + " " + restOfMsg;
+        cmd.avatarName = "";
+        return msg;
+    }
+};
+
+var cmdExtensions;
+
 init();
 
 function init() {
@@ -62,6 +96,11 @@ function init() {
         historyLog = JSON.parse(Settings.getValue(settingsRoot + "/HistoryLog", "[]"));
     } catch (e) {
         //
+    }
+
+    if (Script.resolvePath("./cmdExtensions.js") !== "") {
+        cmdExtensions = Script.require(Script.resolvePath("./cmdExtensions.js") + "?" + Date.now());
+        commands = cmdExtensions.init(commands);
     }
 
     setupHistoryWindow(false);
@@ -220,6 +259,7 @@ function processChat(cmd) {
     function commandResult() {
         msg = "";
         setVisible(false);
+        return msg;
     }
 
     var msg = cmd.message;
@@ -232,6 +272,12 @@ function processChat(cmd) {
 
         msg = "/" + msg;
         var cmd1 = commandList[0].toLowerCase();
+
+        if (commands.hasOwnProperty(cmd1)) {
+            msg = commands[cmd1](cmd1, commandList, restOfMsg, commandResult, cmd, msg);
+        }
+
+        /*
         if (cmd1 === "l") {
             chatBarChannel = "Local";
             commandResult();
@@ -258,7 +304,7 @@ function processChat(cmd) {
         if (cmd1 === "me") {
             msg = cmd.avatarName + " " + restOfMsg;
             cmd.avatarName = "";
-        }
+        }*/
     }
     cmd.message = msg;
     return cmd;
@@ -397,6 +443,9 @@ function messageReceived(channel, message) {
         }
         if (!cmd.FAILED) {
             if (cmd.type === "TransmitChatMessage") {
+                if (cmd.message === undefined) {
+                    return;
+                }
                 if (!cmd.hasOwnProperty("channel")) {
                     cmd.channel = "Domain";
                 }

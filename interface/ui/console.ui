@@ -14,7 +14,9 @@
    <string>Dialog</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">QDialog { background: white }</string>
+   <string notr="true">QDialog { background-color: rgb(50, 50, 50);
+background: rgb(50, 50, 50);
+color: rgb(255, 255, 255); }</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="spacing">
@@ -40,6 +42,10 @@
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: rgb(50, 50, 50);
+color: rgb(255, 255, 255);</string>
+     </property>
      <layout class="QVBoxLayout" name="verticalLayout_2">
       <property name="spacing">
        <number>0</number>
@@ -59,7 +65,8 @@
       <item>
        <widget class="QScrollArea" name="scrollArea">
         <property name="styleSheet">
-         <string notr="true"/>
+         <string notr="true">background-color: rgb(50, 50, 50);
+color: rgb(255, 255, 255);</string>
         </property>
         <property name="frameShape">
          <enum>QFrame::NoFrame</enum>
@@ -75,12 +82,13 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>1040</width>
+           <width>1045</width>
            <height>205</height>
           </rect>
          </property>
          <property name="styleSheet">
-          <string notr="true">background-color: white;</string>
+          <string notr="true">background-color: rgb(50, 50, 50);
+color: rgb(255, 255, 255);</string>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_3">
           <property name="spacing">
@@ -105,6 +113,10 @@
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">background-color: rgb(50, 50, 50);
+color: rgb(255, 255, 255);</string>
             </property>
             <layout class="QVBoxLayout" name="verticalLayout_6">
              <property name="spacing">
@@ -131,7 +143,8 @@
                 </sizepolicy>
                </property>
                <property name="styleSheet">
-                <string notr="true">background-color: white;</string>
+                <string notr="true">background-color: rgb(50, 50, 50);
+color: rgb(255, 255, 255);</string>
                </property>
                <layout class="QVBoxLayout" name="verticalLayout_5">
                 <property name="spacing">
@@ -159,6 +172,10 @@
                  <horstretch>0</horstretch>
                  <verstretch>0</verstretch>
                 </sizepolicy>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">background-color: rgb(50, 50, 50);
+color: rgb(255, 255, 255);</string>
                </property>
                <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="0,0">
                 <property name="spacing">
@@ -224,11 +241,11 @@
                   <property name="font">
                    <font>
                     <family>Inconsolata,Lucida Console,Andale Mono,Monaco</family>
-                    <pointsize>-1</pointsize>
                    </font>
                   </property>
-                  <property name="textColor">
-                   <color>black</color>
+                  <property name="styleSheet">
+                   <string notr="true">background-color: rgb(50, 50, 50);
+color: rgb(255, 255, 255);</string>
                   </property>
                   <property name="frameShape">
                    <enum>QFrame::NoFrame</enum>
@@ -238,6 +255,13 @@
                   </property>
                   <property name="horizontalScrollBarPolicy">
                    <enum>Qt::ScrollBarAlwaysOff</enum>
+                  </property>
+                  <property name="textColor" stdset="0">
+                   <color>
+                    <red>0</red>
+                    <green>0</green>
+                    <blue>0</blue>
+                   </color>
                   </property>
                  </widget>
                 </item>
